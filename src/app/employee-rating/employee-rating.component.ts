@@ -75,7 +75,7 @@ export class EmployeeRatingComponent implements OnInit {
   loadEmployeeDetails(id: string, index: number) {
     if (!id) return;
 
-    this.http.get<any>(`https://docker-employee-rating-4.onrender.com/api/save/${id}`).subscribe({
+    this.http.get<any>(`https://docker-employee-rating-4.onrender.com/api/getEmployeeById/${id}`).subscribe({
       next: (data) => {
         this.employeeForms[index].employeeName = data.employeeName;
         this.employeeForms[index].designation = data.designation;
