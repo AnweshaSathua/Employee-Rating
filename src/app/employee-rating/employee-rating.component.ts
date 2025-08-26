@@ -47,17 +47,35 @@ export class EmployeeRatingComponent implements OnInit {
     });
   }
 
+  // fetchEmployees() {
+  //   this.http.get<any[]>('https://docker-employee-rating-4.onrender.com/api/fetchAll/{teamleademail}').subscribe({
+  //     next: (data) => this.employees = data,
+  //     error: (err) => console.error('Error fetching employee list:', err)
+  //   });
+  // }
+
   fetchEmployees() {
-    this.http.get<any[]>('http://localhost:8080/employees').subscribe({
-      next: (data) => this.employees = data,
-      error: (err) => console.error('Error fetching employee list:', err)
+  const urlParams = new URLSearchParams(window.location.search);
+  const teamLeadEmail = urlParams.get('teamLeadEmail');
+
+  if (teamLeadEmail) {
+    this.http.get<any[]>(`https://docker-employee-rating-4.onrender.com/api/fetchAll/${teamLeadEmail}`).subscribe({
+      next: (data) => {
+        this.employees = data.filter(emp=> !emp.noticePeriod && !emp.probationPeriod); // No further filtering needed if backend handles it
+      },
+      error: (err) => {
+        console.error('Error fetching employee list:', err);
+      }
     });
+  } else {
+    console.error('Team lead email not found in URL');
   }
+}
 
   loadEmployeeDetails(id: string, index: number) {
     if (!id) return;
 
-    this.http.get<any>(`http://localhost:8080/rating/save/${id}`).subscribe({
+    this.http.get<any>(`https://docker-employee-rating-4.onrender.com/api/save/${id}`).subscribe({
       next: (data) => {
         this.employeeForms[index].employeeName = data.employeeName;
         this.employeeForms[index].designation = data.designation;
@@ -171,7 +189,7 @@ export class EmployeeRatingComponent implements OnInit {
       return;
     }
 
-    this.http.post('http://localhost:8080/rating/save-multiple', payload).subscribe({
+    this.http.post('https://docker-employee-rating-4.onrender.com/rating/bulkSave', payload).subscribe({
       next: (res) => {
         console.log('✅ Ratings submitted:', res);
         alert('All ratings submitted successfully!');
