@@ -26,7 +26,6 @@ export class EmployeeRatingComponent implements OnInit {
   employees: any[] = [];
   employeeForms: any[] = [];
   isDarkMode = false;
-  loadEmployeeDetails: any;
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
@@ -73,26 +72,26 @@ export class EmployeeRatingComponent implements OnInit {
   }
 }
 
-  // loadEmployeeDetails(id: string, index: number) {
-  //   if (!id) return;
+  loadEmployeeDetails(id: string, index: number) {
+    if (!id) return;
 
-  //   this.http.get<any>(`https://docker-employee-rating-4.onrender.com/api/getEmployeeById/${id}`).subscribe({
-  //     next: (data) => {
-  //       this.employeeForms[index].employeeName = data.employeeName;
-  //       this.employeeForms[index].designation = data.designation;
-  //       this.employeeForms[index].project_name = data.projectName;
+    this.http.get<any>(`https://docker-employee-rating-4.onrender.com/api/save/${id}`).subscribe({
+      next: (data) => {
+        this.employeeForms[index].employeeName = data.employeeName;
+        this.employeeForms[index].designation = data.designation;
+        this.employeeForms[index].project_name = data.projectName;
 
-  //       // Pre-fill ratings if available
-  //       this.performanceCriteria.forEach(criteria => {
-  //         this.employeeForms[index].formData[criteria.key] = data[criteria.key] ?? '';
-  //       });
-  //     },
-  //     error: (err) => {
-  //       console.error('❌ Failed to load employee data:', err);
-  //       alert('Failed to fetch employee details.');
-  //     }
-  //   });
-  // }
+        // Pre-fill ratings if available
+        this.performanceCriteria.forEach(criteria => {
+          this.employeeForms[index].formData[criteria.key] = data[criteria.key] ?? '';
+        });
+      },
+      error: (err) => {
+        console.error('❌ Failed to load employee data:', err);
+        alert('Failed to fetch employee details.');
+      }
+    });
+  }
 
   // ✅ Add More button - creates a new form
   addEmployeeForm() {
