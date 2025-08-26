@@ -163,7 +163,7 @@ export class EmployeeRatingComponent implements OnInit {
   }
 
   onEmployeeSelect(selectedId: string, index: number) {
-  const selectedEmp = this.employees.find(emp => emp.id === selectedId);
+  const selectedEmp = this.employees.find(emp => emp.employeeId === selectedId);
   if (selectedEmp) {
     this.employeeForms[index].employeeName = selectedEmp.name;
     this.employeeForms[index].designation = selectedEmp.designation;
@@ -173,7 +173,7 @@ export class EmployeeRatingComponent implements OnInit {
 
 
   onEmployeeNameSelect(selectedName: string, index: number) {
-    const selectedEmp = this.employees.find(emp => emp.name === selectedName);
+    const selectedEmp = this.employees.find(emp => emp.employeeName === selectedName);
     if (!selectedEmp) return;
     this.employeeForms[index].employeeId = selectedEmp.id;
     this.loadEmployeeDetails(selectedEmp.id, index);
