@@ -161,13 +161,24 @@ export class EmployeeRatingComponent implements OnInit {
     this.employeeForms.splice(i, 1);
   }
 
-  onEmployeeSelect(selectedId: string, index: number) {
-  const selectedEmp = this.employees.find(emp => emp.employeeId === selectedId);
-  if (selectedEmp) {
-    this.employeeForms[index].employeeName = selectedEmp.name;
-    this.employeeForms[index].designation = selectedEmp.designation;
-    this.employeeForms[index].projectName = selectedEmp.projectName;
+ onEmployeeSelect(selectedId: string, index: number) {
+  if (!selectedId) return;
+ 
+  // Find the employee in the local array by employeeId
+  const data = this.employees.find(emp => emp.employeeId === selectedId);
+  if (!data) {
+    alert('Employee not found!');
+    return;
   }
+ 
+  this.employeeForms[index].employeeName = data.employeeName;
+  this.employeeForms[index].designation = data.designation;
+  this.employeeForms[index].project_name = data.projectName;
+ 
+  // Initialize criteria values
+  this.performanceCriteria.forEach(criteria => {
+    this.employeeForms[index].formData[criteria.key] = data[criteria.key] ?? null;
+  });
 }
 
 
